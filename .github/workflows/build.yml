@@ -23,8 +23,14 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
+      - name: Flutter SDK Kurulumu (Flet İçin Zorunlu)
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
       - name: Bağımlılıkları Yükle
         run: |
+          pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: APK Derleme Adımı
