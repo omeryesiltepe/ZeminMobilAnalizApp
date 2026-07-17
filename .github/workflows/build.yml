@@ -1,0 +1,44 @@
+name: Build Flet APK
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Linux Eksik Sistem Kütüphanelerini Kur
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libmpfr-dev libmpc-dev binutils
+
+      - name: Python Bağımlılıklarını Yükle
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: APK Derleme Adımı
+        run: |
+          flet build apk
+
+      - name: Üretilen APK Dosyasını Çıkar
+        uses: actions/upload-artifact@v4
+        with:
+          name: Zemin-Analiz-Uygulamasi
+          path: build/apk/*.apk
